@@ -1,8 +1,11 @@
 <script setup lang="ts">
+
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <slot></slot>
 </template>
+
+<style scoped>
+
+</style>
