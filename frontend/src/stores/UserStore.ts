@@ -1,38 +1,27 @@
 import {defineStore} from "pinia";
-import axiosInstance from "@/axios/axios";
-
-interface User {
-  id: number,
-  name: string,
-  email: string,
-  avatar: string | null,
-}
+import type {User} from "@/types/User";
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
-    id: 0,
+    id: -1,
     name: '',
     email: '',
-    avatar: null as string | null,
   }),
   actions: {
     setUser(user: User) {
       this.id = user.id;
       this.name = user.name;
       this.email = user.email;
-      this.avatar = user.avatar;
     },
-    clearUser(){
+    clearUser() {
       this.id = null;
       this.name = null;
       this.email = null;
-      this.avatar = null;
     },
-    $reset(){
+    $reset() {
       this.id = null;
       this.name = null;
       this.email = null;
-      this.avatar = null;
     }
   }
 })

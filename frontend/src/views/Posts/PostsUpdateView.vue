@@ -1,24 +1,37 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import usePosts from "@/axios/usePosts";
 import {useUserStore} from "@/stores/UserStore";
+import type {Post} from "@/types/Post";
+import {useRoute} from "vue-router";
 
-const user_id = useUserStore().id;
+const {show} = usePosts();
+const post = ref<Post>();
 const title = ref('');
 const description = ref('');
 const text = ref('');
-const icon = ref('');
+
+const route = useRoute();
+const post_id = route.params.id;
 
 async function handleSubmit() {
-  const {create} = usePosts();
+  const {update} = usePosts();
 
-  await create({
-    user_id: user_id,
+  await update(post_id, {
     title: title.value,
     description: description.value,
     text: text.value
   });
 }
+
+onMounted(async () => {
+  const response = await show(post_id);
+  post.value = response.post;
+
+  title.value = post.value.title;
+  description.value = post.value.description;
+  text.value = post.value.text;
+})
 </script>
 
 <template>
@@ -45,8 +58,13 @@ async function handleSubmit() {
 
     <button type="submit"
             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-      Создать
+      Сохранить
     </button>
+
+    <router-link :to="{name:'posts.show', params:{id:post_id}}"
+                 class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+      Назад
+    </router-link>
   </form>
 </template>
 

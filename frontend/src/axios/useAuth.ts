@@ -1,13 +1,7 @@
 import {computed, reactive} from "vue";
 import axiosInstance from "@/axios/axios";
 import {useUserStore} from "@/stores/UserStore";
-
-interface User {
-  id: number,
-  name: string,
-  email: string,
-  password: string,
-}
+import type {User} from "@/types/User";
 
 const state = reactive({
   isAuth: false,
@@ -31,7 +25,7 @@ export default function useAuth() {
   const login = async (credentials: {
     email: string,
     password: string,
-    remember: number,
+    remember: boolean,
   }) => {
     try {
       const response = await axiosInstance.post('/api/login', {
@@ -53,7 +47,14 @@ export default function useAuth() {
       setIsAuth(true);
       setUser(response.data);
 
-      userStore.setUser(user.value);
+      userStore.setUser({
+        id: response.data.id,
+        name: response.data.name,
+        email: response.data.email,
+        password: response.data.password,
+      });
+
+      console.log(userStore.id);
 
       return response;
     } catch (e) {

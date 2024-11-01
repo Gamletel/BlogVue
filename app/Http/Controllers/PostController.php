@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -18,7 +19,12 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        return response()->json($post);
+        $user = User::find($post->user_id);
+
+        return response()->json([
+            'post'=>$post,
+            'creator'=>$user,
+        ]);
     }
 
     public function store(Request $request)
@@ -43,7 +49,7 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->validate([
-            'title' => 'required|string|min:5|unique:posts,title',
+            'title' => 'required|string|min:5',
             'description' => 'nullable|string',
             'text' => 'nullable|string'
         ]);

@@ -2,6 +2,7 @@
 import usePosts from "@/axios/usePosts";
 import {onMounted, ref} from "vue";
 import type {Post} from "@/types/Post";
+import moment from "moment";
 
 const props = defineProps<{
   post: Post,
@@ -13,7 +14,7 @@ const post: Post = props.post;
 <template>
   <router-link :to="{name: 'posts.show', params:{id:post.id}}"
                class="post-card w-full p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-    <p>{{ post.created_at }}</p>
+    <p>{{ moment(post.created_at).locale('ru').calendar() }}</p>
 
     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
       {{ post.title }}

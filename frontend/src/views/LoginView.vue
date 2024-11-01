@@ -3,12 +3,11 @@
 import {ref} from "vue";
 import useAuth from "@/axios/useAuth";
 
-const email:string = ref('');
-const password:string = ref('');
-const remember:boolean = ref(false);
+const email = ref('');
+const password = ref('');
+const remember = ref(false);
 
 const {login} = useAuth();
-
 async function handleSubmit() {
   await login({
     email: email.value,

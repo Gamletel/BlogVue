@@ -2,34 +2,88 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components{
-    p{
+@layer components {
+    p {
         @apply font-normal text-gray-700 dark:text-gray-400;
     }
-    h1{
+
+    h1 {
         @apply text-5xl font-extrabold dark:text-white;
     }
-    h2{
+
+    h2 {
         @apply text-4xl font-bold dark:text-white;
     }
-    h3{
+
+    h3 {
         @apply text-3xl font-bold dark:text-white;
     }
-    h4{
+
+    h4 {
         @apply text-2xl font-bold dark:text-white;
     }
-    h5{
+
+    h5 {
         @apply text-xl font-bold dark:text-white;
     }
-    h6{
+
+    h6 {
         @apply text-lg font-bold dark:text-white;
     }
 
-    .router-link-active{
+    .p-leading {
+        @apply text-lg text-gray-500 md:text-xl dark:text-gray-400;
+    }
+
+    .text-block p strong {
+        @apply font-semibold text-gray-900 dark:text-white;
+    }
+
+    .text-block em {
+        @apply italic;
+    }
+
+    .text-block ul {
+        @apply max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400;
+    }
+
+    .text-block ul ol {
+        @apply ps-5 mt-2 space-y-1 list-decimal list-inside;
+    }
+
+    .text-block ol {
+        @apply max-w-md space-y-1 text-gray-500 list-decimal list-inside dark:text-gray-400;
+    }
+
+    .text-block h2 {
+        @apply mb-5;
+    }
+
+    .text-block h3 {
+        @apply mb-4;
+    }
+
+    .text-block h4 {
+        @apply mb-3;
+    }
+
+    .text-block h5 {
+        @apply mb-2;
+    }
+
+    .text-block h6 {
+        @apply mb-1;
+    }
+
+    .text-block p, .text-block ul, .text-block ol {
+        @apply mb-2;
+    }
+
+    .router-link-active {
         @apply text-blue-700 dark:text-blue-500;
     }
 
-    .todo-card-disabled{
+    .todo-card-disabled {
         opacity: 0.7 !important;
     }
 }
