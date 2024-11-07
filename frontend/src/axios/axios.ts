@@ -8,7 +8,8 @@ const axiosInstance = axios.create({
   headers: {
     "Accept": "application/json",
     "Content": "application/json",
-  }
+    "Access-Control-Allow-Origin": "*"
+}
 })
 
 axiosInstance.interceptors.request.use(function(config) {

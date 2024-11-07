@@ -2,6 +2,7 @@
 
 import {useUserStore} from "@/stores/UserStore";
 import useAuth from "@/axios/useAuth";
+import axiosInstance from "@/axios/axios";
 
 const {isAuth} = useAuth();
 const user = useUserStore();
@@ -10,9 +11,7 @@ const {logout} = useAuth();
 </script>
 
 <template>
-
-
-  <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
+  <nav class="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700 mb-3">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <router-link :to="{name:'home'}" class="flex items-center space-x-3 rtl:space-x-reverse mr-3">
         <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo"/>
@@ -24,7 +23,8 @@ const {logout} = useAuth();
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                 data-dropdown-placement="bottom">
           <span class="sr-only">Open user menu</span>
-          <img class="w-8 h-8 rounded-full" src="" alt="user photo">
+          <img class="w-8 h-8 rounded-full" :src="axiosInstance.defaults.baseURL+'storage/'+ user.avatar"
+               alt="user photo">
         </button>
         <!-- Dropdown menu -->
         <div
@@ -53,12 +53,16 @@ const {logout} = useAuth();
               </router-link>
             </li>
             <li v-if="isAuth">
-              <router-link :to="{name:'user.show', params:{id:user.id}}"
-                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Профиль</router-link>
+              <router-link :to="{name:'users.show', params:{id:user?.id}}"
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                Профиль
+              </router-link>
             </li>
-            <li>
-              <a href="#"
-                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Настройки</a>
+            <li v-if="isAuth">
+              <router-link :to="{name:'users.settings', params:{id:user?.id}}"
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                Настройки
+              </router-link>
             </li>
             <li v-if="isAuth">
               <button type="button" @click="logout"
@@ -101,7 +105,10 @@ const {logout} = useAuth();
                  class="z-10 hidden font-normal bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
               <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownLargeButton">
                 <li>
-                  <router-link :to="{name:'posts.index'}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Все</router-link>
+                  <router-link :to="{name:'posts.index'}"
+                               class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    Все
+                  </router-link>
                 </li>
                 <li aria-labelledby="dropdownNavbarLink" class="hidden">
                   <button id="doubleDropdownButton" data-dropdown-toggle="doubleDropdown"
@@ -138,19 +145,25 @@ const {logout} = useAuth();
                   </div>
                 </li>
                 <li>
-                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Мои посты</a>
+                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Мои
+                    посты</a>
                 </li>
               </ul>
               <div class="py-1">
                 <li>
-                  <router-link :to="{name:'posts.create'}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Создать новый</router-link>
+                  <router-link :to="{name:'posts.create'}"
+                               class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    Создать новый
+                  </router-link>
                 </li>
               </div>
             </div>
           </li>
           <li>
-            <a href="#"
-               class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Services</a>
+            <router-link :to="{name:'users.index'}"
+                         class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+              Пользователи
+            </router-link>
           </li>
           <li>
             <a href="#"

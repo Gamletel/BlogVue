@@ -52,11 +52,12 @@ export default function useAuth() {
         name: response.data.name,
         email: response.data.email,
         password: response.data.password,
+        avatar: response.data.avatar,
       });
 
       console.log(userStore.id);
 
-      return response;
+      return response.data;
     } catch (e) {
       console.error(e);
       setIsAuth(false);

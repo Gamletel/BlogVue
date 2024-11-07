@@ -6,22 +6,23 @@ export const useUserStore = defineStore('userStore', {
     id: -1,
     name: '',
     email: '',
+    password: '',
+    avatar: '',
   }),
   actions: {
     setUser(user: User) {
       this.id = user.id;
       this.name = user.name;
       this.email = user.email;
-    },
-    clearUser() {
-      this.id = null;
-      this.name = null;
-      this.email = null;
+      this.password = user.password;
+      this.avatar = user.avatar;
     },
     $reset() {
       this.id = null;
       this.name = null;
       this.email = null;
+      this.password = null;
+      this.avatar = null;
     }
   }
 })
