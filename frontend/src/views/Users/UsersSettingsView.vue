@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import useUsers from "@/axios/useUsers";
 import type {User} from "@/types/User";
 import useAuth from "@/axios/useAuth";
+import axiosInstance from "@/axios/axios";
 
 const {update} = useUsers();
 const {attempt} = useAuth();
@@ -53,7 +54,12 @@ function handleFileChange(event: Event) {
   <h1 class="mb-5">Настройки</h1>
 
   <form @submit.prevent="handleSubmit">
-    <input type="file" @change="handleFileChange" name="avatar" id="avatar" accept="image/*">
+    <label for="avatar" class="cursor-pointer">
+      <img :src="axiosInstance.defaults.baseURL+'storage/'+user?.avatar ?? axiosInstance.defaults.baseURL+'storage/avatars/default.jpg'" alt=""
+           class="w-[100px] h-[100px] rounded-full mb-5">
+    </label>
+
+    <input type="file" @change="handleFileChange" class="hidden" name="avatar" id="avatar" accept="image/*">
 
     <div class="grid gap-6 mb-6 md:grid-cols-2">
       <div>

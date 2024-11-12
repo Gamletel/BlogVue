@@ -145,10 +145,13 @@ const {logout} = useAuth();
                   </div>
                 </li>
                 <li>
-                  <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Мои
-                    посты</a>
+                  <router-link :to="{name:'users.show', params:{id:user.id}}"
+                               class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    Мои посты
+                  </router-link>
                 </li>
               </ul>
+
               <div class="py-1">
                 <li>
                   <router-link :to="{name:'posts.create'}"

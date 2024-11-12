@@ -51,11 +51,21 @@ export default function usePosts() {
     }
   }
 
+  const userPosts = async (id: number) => {
+    try {
+      const response = await axiosInstance.get(`/api/users/${id}/posts`);
+      return response.data;
+    } catch (e) {
+      console.error('Ошибка при получении постов', e);
+    }
+  }
+
   return {
     index,
     show,
     create,
     update,
     deletePost,
+    userPosts,
   };
 }

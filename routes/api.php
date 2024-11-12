@@ -13,7 +13,7 @@ Route::get('/user', function (Request $request) {
 
 Route::group([
     'prefix' => 'posts',
-    'name' => 'posts.'
+    'as' => 'posts.'
 ], function () {
     Route::get('/', [PostController::class, 'index'])->name('index');
     Route::post('/create', [PostController::class, 'store'])->name('store');
@@ -22,6 +22,12 @@ Route::group([
     Route::delete('/{id}', [PostController::class, 'delete'])->name('delete');
 });
 
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
-Route::post('/users/{id}', [UserController::class, 'update'])->name('users.update');
+Route::group([
+    'prefix' => 'users',
+    'as' => 'users.'
+], function () {
+    Route::get('/', [UserController::class, 'index'])->name('index');
+    Route::get('/{id}/posts', [UserController::class, 'postsByUser'])->name('posts');
+    Route::get('/{id}', [UserController::class, 'show'])->name('show');
+    Route::post('/{id}', [UserController::class, 'update'])->name('update');
+});

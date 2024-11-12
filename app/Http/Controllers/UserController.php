@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\File;
 use Illuminate\Http\JsonResponse;
@@ -52,5 +53,12 @@ class UserController extends Controller
             'user' => $user,
             'avatar_path' => $user->avatar,
         ]);
+    }
+
+    public function postsByUser($id)
+    {
+        $posts = Post::where('user_id', $id)->get();
+
+        return response()->json($posts);
     }
 }

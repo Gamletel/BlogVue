@@ -9,6 +9,8 @@ import PostsUpdateView from "@/views/Posts/PostsUpdateView.vue";
 import UsersShowView from "@/views/Users/UsersShowView.vue";
 import UsersIndexView from "@/views/Users/UsersIndexView.vue";
 import UsersSettingsView from "@/views/Users/UsersSettingsView.vue";
+import useAuth from "@/axios/useAuth";
+import {useUserStore} from "@/stores/UserStore";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +66,19 @@ const router = createRouter({
       component: UsersSettingsView,
     },
   ],
+})
+
+router.beforeEach(async (to, from, next)=>{
+  const userStore = useUserStore();
+  const { attempt } = useAuth();
+
+  if(userStore.id === -1){
+    await attempt();
+
+    return next();
+  }
+
+  return next();
 })
 
 export default router

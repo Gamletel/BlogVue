@@ -4,6 +4,7 @@ import useUsers from "@/axios/useUsers";
 import {onMounted, ref} from "vue";
 import type {User} from "@/types/User";
 import {useUserStore} from "@/stores/UserStore";
+import axiosInstance from "@/axios/axios";
 
 const props = defineProps<{
   id: number,
@@ -55,8 +56,11 @@ onMounted(async () => {
       </div>
     </div>
     <div class="flex flex-col items-center pb-10">
-      <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src=""
-           alt="Bonnie image"/>
+      <router-link :to="{name:'users.show', params:{id: props.id}}">
+        <img class="w-24 h-24 mb-3 rounded-full shadow-lg"
+             :src="axiosInstance.defaults.baseURL +'storage/'+ user?.avatar"
+             alt="Bonnie image"/>
+      </router-link>
       <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
         {{ user?.name }}
 
