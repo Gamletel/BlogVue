@@ -4,11 +4,11 @@ import PostCard from "@/components/PostCard.vue";
 import {onMounted, ref} from "vue";
 import type {Post} from "@/types/Post";
 
-const {index} = usePosts();
+const {indexPosts} = usePosts();
 const posts = ref<Post[]>([]);
 
 onMounted(async () => {
-  posts.value = await index();
+  posts.value = await indexPosts();
 })
 </script>
 

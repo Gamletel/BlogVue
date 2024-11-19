@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserComment extends Model
 {
@@ -22,4 +23,12 @@ class UserComment extends Model
         'title',
         'text',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function post(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Post::class, 'post_id');
+    }
 }

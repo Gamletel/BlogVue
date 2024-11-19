@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\User;
+use App\Models\UserComment;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -67,5 +68,14 @@ class PostController extends Controller
         $post->delete();
 
         return response()->json(['message' => 'delete success']);
+    }
+
+    public function getComments($id)
+    {
+        $comments = UserComment::where('post_id', $id)
+            ->orderBy('id', 'DESC')
+            ->pluck('id');
+
+        return response()->json($comments);
     }
 }

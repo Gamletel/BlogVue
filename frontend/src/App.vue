@@ -9,7 +9,6 @@ import MainLayout from "@/layouts/MainLayout.vue";
   <MainLayout>
     <RouterView/>
   </MainLayout>
-
 </template>
 
 <style scoped>

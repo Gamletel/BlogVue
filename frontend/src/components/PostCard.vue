@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import usePosts from "@/axios/usePosts";
-import {onMounted, ref} from "vue";
 import type {Post} from "@/types/Post";
 import moment from "moment";
 
 const props = defineProps<{
   post: Post,
 }>();
-const {show} = usePosts();
 const post: Post = props.post;
 </script>
 

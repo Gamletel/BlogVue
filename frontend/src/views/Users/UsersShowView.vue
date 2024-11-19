@@ -7,6 +7,7 @@ import type {User} from "@/types/User";
 import useUsers from "@/axios/useUsers";
 import usePosts from "@/axios/usePosts";
 import PostCard from "@/components/PostCard.vue";
+import useAuth from "@/axios/useAuth";
 
 const route = useRoute();
 const authUser = useUserStore();
@@ -14,14 +15,20 @@ const user = ref<User>();
 const isAuthUserPage = ref(false);
 const {userPosts} = usePosts();
 const posts = ref();
+const {isAuth} = useAuth();
 
 onMounted(async () => {
-  isAuthUserPage.value = authUser.id === Number(route.params.id);
-  if (isAuthUserPage.value) {
-    user.value = authUser;
+  if (isAuth) {
+    isAuthUserPage.value = authUser.id === Number(route.params.id);
+    if (isAuthUserPage.value) {
+      user.value = authUser;
+    } else {
+      const {showUser} = useUsers();
+      user.value = await showUser(Number(route.params.id));
+    }
   } else {
-    const {show} = useUsers();
-    user.value = await show(Number(route.params.id));
+    const {showUser} = useUsers();
+    user.value = await showUser(Number(route.params.id));
   }
 
   posts.value = await userPosts(Number(route.params.id));
@@ -63,6 +70,14 @@ async function updateUser() {
             <h6 class="color-gray-500 h-auto">Почта</h6>
 
             {{ user?.email }}
+          </div>
+        </div>
+
+        <div class="border-b border-gray-200 py-4 px-3">
+          <div class="flex justify-between items-center">
+            <h6 class="color-gray-500 h-auto">Дата регистрации</h6>
+
+            {{ user?.created_at }}
           </div>
         </div>
       </div>

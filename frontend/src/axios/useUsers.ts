@@ -2,7 +2,7 @@ import axiosInstance from "@/axios/axios";
 import type {User} from "@/types/User";
 
 export default function useUsers() {
-  const index = async () => {
+  const indexUsers = async () => {
     try {
       const response = await axiosInstance.get('/api/users');
 
@@ -12,7 +12,7 @@ export default function useUsers() {
     }
   }
 
-  const show = async (id: number) => {
+  const showUser = async (id: number | undefined) => {
     try {
       const response = await axiosInstance.get(`/api/users/${id}`);
       return response.data;
@@ -22,7 +22,7 @@ export default function useUsers() {
     }
   }
 
-  const update = async (data: FormData) => {
+  const updateUser = async (data: FormData) => {
     try {
       const response = await axiosInstance.post(`/api/users/${data.get("id")}`, data, {
         headers: {
@@ -36,8 +36,8 @@ export default function useUsers() {
   }
 
   return {
-    index,
-    show,
-    update,
+    indexUsers,
+    showUser,
+    updateUser,
   }
 }

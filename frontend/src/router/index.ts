@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import RegisterView from "@/views/RegisterView.vue";
 import LoginView from "@/views/LoginView.vue";
@@ -11,6 +11,7 @@ import UsersIndexView from "@/views/Users/UsersIndexView.vue";
 import UsersSettingsView from "@/views/Users/UsersSettingsView.vue";
 import useAuth from "@/axios/useAuth";
 import {useUserStore} from "@/stores/UserStore";
+import {echo} from "@/echo";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,17 +69,27 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach(async (to, from, next)=>{
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
-  const { attempt } = useAuth();
+  const {attempt} = useAuth();
 
-  if(userStore.id === -1){
-    await attempt();
+  if (userStore.id === -1) {
+    try {
+      await attempt();
 
-    return next();
+      // echo.private(`user.notification.${userStore.id}`).listen('CommentSend', (e: any) => {
+      //   console.log(e);
+      // });
+      // console.log(`user.notification.${userStore.id}`);
+
+      return next();
+    } catch (error) {
+      console.error('Ошибка при попытке авторизации:', error);
+      return next();
+    }
   }
 
   return next();
-})
+});
 
 export default router

@@ -4,4 +4,5 @@ export interface User{
   email: string,
   password: string,
   avatar: File | null,
+  created_at: string | null,
 }

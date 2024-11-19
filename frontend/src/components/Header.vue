@@ -144,7 +144,7 @@ const {logout} = useAuth();
                     </ul>
                   </div>
                 </li>
-                <li>
+                <li v-if="isAuth">
                   <router-link :to="{name:'users.show', params:{id:user.id}}"
                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                     Мои посты
@@ -152,7 +152,7 @@ const {logout} = useAuth();
                 </li>
               </ul>
 
-              <div class="py-1">
+              <div class="py-1" v-if="isAuth">
                 <li>
                   <router-link :to="{name:'posts.create'}"
                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">

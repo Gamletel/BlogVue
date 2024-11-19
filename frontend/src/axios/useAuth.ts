@@ -44,18 +44,16 @@ export default function useAuth() {
   const attempt = async () => {
     try {
       let response = await axiosInstance.get('/api/user');
-      setIsAuth(true);
-      setUser(response.data);
-
       userStore.setUser({
         id: response.data.id,
         name: response.data.name,
         email: response.data.email,
         password: response.data.password,
         avatar: response.data.avatar,
+        created_at: response.data.created_at,
       });
-
-      console.log(userStore.id);
+      setIsAuth(true);
+      setUser(response.data);
 
       return response.data;
     } catch (e) {

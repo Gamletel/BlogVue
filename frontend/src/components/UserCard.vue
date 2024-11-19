@@ -10,18 +10,18 @@ const props = defineProps<{
   id: number,
 }>();
 
-const {show} = useUsers();
+const {showUser} = useUsers();
 const user = ref<User>();
 
 const authUser = useUserStore();
 
 onMounted(async () => {
-  user.value = await show(props.id);
+  user.value = await showUser(props.id);
 })
 </script>
 
 <template>
-  <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+  <div class="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
     <div class="flex justify-end px-4 pt-4">
       <button :id="`dropdownButton-${props.id}`"
               :data-dropdown-toggle="`dropdown-${props.id}`"

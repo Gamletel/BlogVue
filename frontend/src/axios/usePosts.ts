@@ -2,7 +2,7 @@ import axiosInstance from "@/axios/axios";
 import type {Post} from "@/types/Post";
 
 export default function usePosts() {
-  const index = async () => {
+  const indexPosts = async () => {
     try {
       const response = await axiosInstance.get('/api/posts');
       console.log('Полученные посты', response.data);
@@ -13,7 +13,7 @@ export default function usePosts() {
     }
   }
 
-  const show = async (id: number) => {
+  const showPost = async (id: number) => {
     try {
       const response = await axiosInstance.get(`/api/posts/${id}`);
       console.log('Пост найден', response.data);
@@ -24,7 +24,7 @@ export default function usePosts() {
     }
   }
 
-  const create = async (data: Post) => {
+  const createPost = async (data: Post) => {
     try {
       const response = await axiosInstance.post('/api/posts/create', data);
       console.log('Пост успешно создан!', response.data);
@@ -33,7 +33,7 @@ export default function usePosts() {
     }
   }
 
-  const update = async (id: number, data: Post) => {
+  const updatePost= async (id: number, data: Post) => {
     try {
       const response = await axiosInstance.patch(`/api/posts/${id}`, data);
       console.log('Пост обновлен', response.data);
@@ -60,12 +60,22 @@ export default function usePosts() {
     }
   }
 
+  const postComments = async (id: number)=>{
+    try{
+      const response = await axiosInstance.get(`/api/posts/${id}/get-comments`);
+      return response.data;
+    } catch (e) {
+      console.error('Ошибка при получении постов', e);
+    }
+  }
+
   return {
-    index,
-    show,
-    create,
-    update,
+    indexPosts,
+    showPost,
+    createPost,
+    updatePost,
     deletePost,
     userPosts,
+    postComments,
   };
 }
