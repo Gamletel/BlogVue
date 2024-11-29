@@ -48,6 +48,13 @@ class UserController extends Controller
 
         $user->update($data);
 
+        if($request->input('password')){
+            $password = $request->validate(['password'=>'required|min:5']);
+            $password_old = $request->validate(['old_password'=>'required|current_password:sanctum']);
+
+            $user->update($password);
+        }
+
         return response()->json([
             'message' => 'User is updated',
             'user' => $user,

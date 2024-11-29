@@ -87,7 +87,7 @@ async function updateUser() {
           <h5>Последние публикации</h5>
         </div>
 
-        <div class="flex flex-col max-h-[250px] overflow-y-auto">
+        <div class="flex flex-col max-h-[250px] overflow-y-auto px-3">
           <PostCard v-for="post of posts" :post="post" class="mt-3"/>
         </div>
       </div>

@@ -31,7 +31,7 @@ Route::group([
     Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('/{id}/posts', [UserController::class, 'postsByUser'])->name('posts');
     Route::get('/{id}', [UserController::class, 'show'])->name('show');
-    Route::post('/{id}', [UserController::class, 'update'])->name('update');
+    Route::post('/{id}', [UserController::class, 'update'])->name('update')->middleware("auth:sanctum");
 });
 
 Route::group([

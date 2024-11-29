@@ -6,15 +6,16 @@ import type {User} from "@/types/User";
 import useAuth from "@/axios/useAuth";
 import axiosInstance from "@/axios/axios";
 
-const {update} = useUsers();
+const {updateUser} = useUsers();
 const {attempt} = useAuth();
 
 const user = useUserStore();
 const name = ref<string>(user.name);
 const email = ref<string>(user.email);
-// const old_password = ref<string>('');
-// const password = ref<string>(user.password);
+const old_password = ref<string>('');
+const password = ref<string>(user.password);
 const avatar = ref<File | null>(null);
+const errors = ref();
 
 async function handleSubmit() {
   const formData = new FormData();
@@ -22,23 +23,31 @@ async function handleSubmit() {
   formData.append("name", name.value);
   formData.append("email", email.value);
 
-  // let data: User = {
-  //   id: user.id,
-  //   name: name.value,
-  //   email: email.value,
-  //   avatar: avatar.value,
-  // };
-  //
-  // if(data.avatar){
-  //   console.log(data.avatar);
-  // }
+  if (password.value) {
+    formData.append("password", password.value);
+    formData.append("old_password", old_password.value);
+  }
+
+  console.log(formData);
+
+  let data: User = {
+    id: user.id,
+    name: name.value,
+    email: email.value,
+    avatar: avatar.value,
+  };
+
+  if (data.avatar) {
+    console.log(data.avatar);
+  }
 
   if (avatar.value) {
     formData.append("avatar", avatar.value);
     console.log(formData.get('avatar'));
   }
 
-  await update(formData);
+  errors.value = await updateUser(formData);
+  console.log(errors.value);
   await attempt();
 }
 
@@ -53,10 +62,15 @@ function handleFileChange(event: Event) {
 <template>
   <h1 class="mb-5">Настройки</h1>
 
+  <div v-if="errors">
+    <p v-for="error in errors">{{error}}</p>
+  </div>
   <form @submit.prevent="handleSubmit">
     <label for="avatar" class="cursor-pointer">
-      <img :src="axiosInstance.defaults.baseURL+'storage/'+user?.avatar ?? axiosInstance.defaults.baseURL+'storage/avatars/default.jpg'" alt=""
-           class="w-[100px] h-[100px] rounded-full mb-5">
+      <img
+        :src="axiosInstance.defaults.baseURL+'storage/'+user?.avatar ?? axiosInstance.defaults.baseURL+'storage/avatars/default.jpg'"
+        alt=""
+        class="w-[100px] h-[100px] rounded-full mb-5">
     </label>
 
     <input type="file" @change="handleFileChange" class="hidden" name="avatar" id="avatar" accept="image/*">
@@ -76,22 +90,22 @@ function handleFileChange(event: Event) {
       </div>
     </div>
 
-    <!--    <div class="grid gap-6 mb-6 md:grid-cols-2">-->
-    <!--      <div class="">-->
-    <!--        <label for="old_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Old-->
-    <!--          Password</label>-->
-    <!--        <input v-model="old_password" type="password" id="old_password"-->
-    <!--               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"-->
-    <!--               placeholder="•••••••••"/>-->
-    <!--      </div>-->
+    <div class="grid gap-6 mb-6 md:grid-cols-2">
+      <div class="">
+        <label for="old_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Old
+          Password</label>
+        <input v-model="old_password" type="password" id="old_password"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+               placeholder="•••••••••" autocomplete="false"/>
+      </div>
 
-    <!--      <div class="">-->
-    <!--        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Password</label>-->
-    <!--        <input v-model="password" type="password" id="password"-->
-    <!--               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"-->
-    <!--               placeholder="•••••••••"/>-->
-    <!--      </div>-->
-    <!--    </div>-->
+      <div class="">
+        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Password</label>
+        <input v-model="password" type="password" id="password"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+               placeholder="•••••••••" autocomplete="false"/>
+      </div>
+    </div>
 
 
     <div class="flex gap-3">
