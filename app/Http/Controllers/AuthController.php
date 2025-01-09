@@ -2,92 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Services\AuthService;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+
+    public function __construct(private readonly AuthService $authService)
+    {
+    }
+
+    /**
+     * @param RegisterRequest $request
+     * @return JsonResponse
+     */
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        return response()->json($this->authService->register($request->all()));
+    }
+
+
     /**
      * @param Request $request
      * @return JsonResponse
      */
-    public function register(Request $request): JsonResponse
+    public function logout(Request $request): JsonResponse
     {
-        $data = $request->validate([
-            'name' => 'required|string|min:5|max:32|unique:users',
-            'email' => 'nullable|email|unique:users',
-            'password' => 'required|confirmed|min:5',
-//            'avatar'=>'nullable|file|size:512'
-            'remember' => 'nullable|boolean',
-        ]);
-
-        $user = new User();
-        $user['name'] = $data['name'];
-        $user['email'] = $data['email'];
-        $user['password'] = $data['password'];
-
-        $user->save();
-
-        if (auth()->attempt([
-            'email' => $user['name'],
-            'password' => $user['password'],
-        ], $data['remember'])) {
-            session()->regenerate();
-
-            $user = auth()->user();
-
-            return response()->json([
-                'message' => 'register is success',
-                'user' => $user,
-            ]);
-        }
-
-        return response()->json(['message' => 'error']);
-    }
-
-    /**
-     * Log the user out of the application.
-     */
-    public function logout(Request $request): \Illuminate\Http\JsonResponse
-    {
-        $request->user()->currentAccessToken()->delete();
+        $this->authService->logout((array)$request);
 
         return response()->json(['message' => 'logout success']);
     }
 
     /**
-     * @param Request $request
+     * @param LoginRequest $request
      * @return JsonResponse
      */
-    public function login(Request $request): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-            'remember' => 'nullable|boolean',
-        ]);
+        $result = $this->authService->login($request->all());
 
-        if (auth()->attempt([
-            'email' => $data['email'],
-            'password' => $data['password'],
-        ], $data['remember'])) {
-            session()->regenerate();
-
-            $tokenResult = $request->user()->createToken('access_token');
-            $token = $tokenResult->plainTextToken;
-
-            return response()->json([
-                'message' => 'auth success',
-                'user' => auth()->user(),
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'auth error'
-            ]);
+        if (!$result) {
+            return response()->json(['message' => 'login failed'], 401);
         }
+
+        return response()->json([
+            'message' => 'Auth success',
+            'user' => $result['user'],
+            'access_token' => $result['access_token'],
+            'token_type' => $result['token_type'],
+        ]);
     }
 }

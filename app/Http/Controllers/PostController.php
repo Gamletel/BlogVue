@@ -2,80 +2,74 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Post\PostCreateRequest;
+use App\Http\Requests\Post\PostUpdateRequest;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\UserComment;
+use App\Repositories\PostRepository;
+use App\Services\PostService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    public function index()
-    {
-        $posts = Post::all();
 
-        return response()->json($posts);
+    public function __construct(private readonly PostService $postService)
+    {
     }
 
-    public function show($id)
+    /**
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
     {
-        $post = Post::find($id);
-
-        $user = User::find($post->user_id);
-
-        return response()->json([
-            'post'=>$post,
-            'creator'=>$user,
-        ]);
+        return response()->json($this->postService->all());
     }
 
-    public function store(Request $request)
+    /**
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function show(int $id): JsonResponse
     {
-        $data = $request->validate([
-            'user_id'=>'required|int',
-            'title' => 'required|string|min:5|unique:posts,title',
-            'description' => 'nullable|string',
-            'text' => 'nullable|string'
-        ]);
-        $post = new Post();
-        $post['user_id'] = $data['user_id'];
-        $post['title'] = $data['title'];
-        $post['description'] = $data['description'];
-        $post['text'] = $data['text'];
-
-        $post->save();
-
-        return response()->json($post);
+        return response()->json($this->postService->show($id));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * @param PostCreateRequest $request
+     * @return JsonResponse
+     */
+    public function store(PostCreateRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'title' => 'required|string|min:5',
-            'description' => 'nullable|string',
-            'text' => 'nullable|string'
-        ]);
-
-        $post = Post::find($id);
-        $post->update($data);
-        $post->save();
-
-        return response()->json($post);
+        return response()->json($this->postService->store($request->all()));
     }
 
-    public function delete($id)
+    /**
+     * @param PostUpdateRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function update(PostUpdateRequest $request, int $id): JsonResponse
     {
-        $post = Post::find($id);
-        $post->delete();
-
-        return response()->json(['message' => 'delete success']);
+        return response()->json($this->postService->update($request->all(), $id));
     }
 
-    public function getComments($id)
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function delete($id): JsonResponse
     {
-        $comments = UserComment::where('post_id', $id)
-            ->orderBy('id', 'DESC')
-            ->pluck('id');
+        return response()->json($this->postService->delete($id));
+    }
 
-        return response()->json($comments);
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function getComments($id): JsonResponse
+    {
+        return response()->json($this->postService->getCommentsByID($id));
     }
 }
