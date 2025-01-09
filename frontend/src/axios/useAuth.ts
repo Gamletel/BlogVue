@@ -2,6 +2,7 @@ import {computed, reactive} from "vue";
 import axiosInstance from "@/axios/axios";
 import {useUserStore} from "@/stores/UserStore";
 import type {User} from "@/types/User";
+import router from "@/router";
 
 const state = reactive({
   isAuth: false,
@@ -28,14 +29,15 @@ export default function useAuth() {
     remember: boolean,
   }) => {
     try {
-      const response = await axiosInstance.post('/api/login', {
+      const res = await axiosInstance.post('/api/login', {
         'email': credentials.email,
         'password': credentials.password,
         'remember': credentials.remember,
       });
 
-      localStorage.setItem('access_token', response.data.access_token);
+      localStorage.setItem('access_token', res.data.access_token);
       await attempt();
+      await router.push(`/users/${res.data.user.id}`);
     } catch (e) {
       console.error(e);
     }
@@ -72,6 +74,8 @@ export default function useAuth() {
       localStorage.removeItem('access_token');
 
       await attempt();
+
+      await router.push('/');
     } catch (e) {
       console.error(e);
     }
@@ -85,7 +89,8 @@ export default function useAuth() {
     remember: boolean,
   }) => {
     try {
-      const response = await axiosInstance.post('/api/register', {
+
+      await axiosInstance.post('/api/register', {
         'name': credentials.name,
         'email': credentials.email,
         'password': credentials.password,

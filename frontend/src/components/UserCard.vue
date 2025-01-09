@@ -58,8 +58,10 @@ onMounted(async () => {
     <div class="flex flex-col items-center pb-10">
       <router-link :to="{name:'users.show', params:{id: props.id}}">
         <img class="w-24 h-24 mb-3 rounded-full shadow-lg"
-             :src="axiosInstance.defaults.baseURL +'storage/'+ user?.avatar"
-             alt="Bonnie image"/>
+             :src="
+             // axiosInstance.defaults.baseURL +'storage/'+
+             user?.avatar ? user?.avatar : axiosInstance.defaults.baseURL + 'storage/avatars/default.png'"
+             :alt="user?.name"/>
       </router-link>
       <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
         {{ user?.name }}

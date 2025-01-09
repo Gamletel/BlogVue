@@ -2,13 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Client\Request;
-use Illuminate\Http\JsonResponse;
 
 class UserRepository implements UserRepositoryInterface
 {

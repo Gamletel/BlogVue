@@ -22,9 +22,7 @@ export default function useComments() {
 
   const deleteComment = async (id: number) => {
     try {
-      const response = await axiosInstance.delete(`/api/comments/${id}`);
-
-      return response;
+      return await axiosInstance.delete(`/api/comments/${id}`);
     } catch (e) {
       console.error('Ошибка при удалении поста', e);
     }

@@ -44,7 +44,7 @@ onMounted(async () => {
 <template>
   <article class="w-full bg-white border border-gray-200 dark:bg-gray-900 dark:border-gray-700 rounded-lg p-3">
     <div class="flex items-center mb-4">
-      <img class="w-10 h-10 me-4 rounded-full" :src="axiosInstance.defaults.baseURL+'storage/'+ user?.avatar" alt="">
+      <img class="w-10 h-10 me-4 rounded-full" :src="user?.avatar ? axiosInstance.defaults.baseURL+'storage/'+ user?.avatar : axiosInstance.defaults.baseURL+'storage/avatars/default.png'" alt="">
       <div class="font-medium dark:text-white">
         <p> {{ user?.name }}
           <time datetime="2014-08-16 19:00" class="block text-sm text-gray-500 dark:text-gray-400">

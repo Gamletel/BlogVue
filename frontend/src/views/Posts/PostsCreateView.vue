@@ -10,9 +10,9 @@ const text = ref('');
 const icon = ref('');
 
 async function handleSubmit() {
-  const {create} = usePosts();
+  const {createPost} = usePosts();
 
-  await create({
+  await createPost({
     user_id: user_id,
     title: title.value,
     description: description.value,

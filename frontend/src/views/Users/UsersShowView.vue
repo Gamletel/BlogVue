@@ -51,9 +51,11 @@ async function updateUser() {
           <div class="flex justify-between items-center">
             <h6 class="color-gray-500 h-auto">Фото</h6>
 
-            <img v-if="user?.avatar" class="w-[75px] h-auto aspect-square rounded-full"
-                 :src="axiosInstance.defaults.baseURL +'storage/'+ user.avatar" alt="avatar">
-            <img v-else :src="axiosInstance.defaults.baseURL + 'storage/avatars/default.png'" alt="avatar">
+            <img class="w-[75px] h-auto aspect-square rounded-full"
+                 :src="
+                 // axiosInstance.defaults.baseURL +'storage/'+ user?.avatar
+                 user?.avatar ? user?.avatar : axiosInstance.defaults.baseURL + 'storage/avatars/default.png'
+            " alt="avatar">
           </div>
         </div>
 

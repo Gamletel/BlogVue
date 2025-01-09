@@ -21,7 +21,10 @@ readonly class PostRepository implements PostRepositoryInterface
 
     public function create(array $data): Post
     {
-        return new Post($data);
+        $post = new Post();
+        $post->fill($data);
+        $post->save();
+        return $post;
     }
 
     public function update(array $data, int $id): Post
@@ -39,7 +42,7 @@ readonly class PostRepository implements PostRepositoryInterface
         return Post::destroy($id);
     }
 
-    public function getCommentsByID(int $id): \Ramsey\Collection\Collection
+    public function getCommentsByID(int $id)
     {
         return UserComment::where('post_id', $id)
             ->orderBy('id', 'DESC')

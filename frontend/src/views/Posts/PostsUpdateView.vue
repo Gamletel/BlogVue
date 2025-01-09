@@ -5,7 +5,7 @@ import {useUserStore} from "@/stores/UserStore";
 import type {Post} from "@/types/Post";
 import {useRoute} from "vue-router";
 
-const {show} = usePosts();
+const {showPost} = usePosts();
 const post = ref<Post>();
 const title = ref('');
 const description = ref('');
@@ -15,9 +15,9 @@ const route = useRoute();
 const post_id = route.params.id;
 
 async function handleSubmit() {
-  const {update} = usePosts();
+  const {updatePost} = usePosts();
 
-  await update(post_id, {
+  await updatePost(post_id, {
     title: title.value,
     description: description.value,
     text: text.value
@@ -25,7 +25,7 @@ async function handleSubmit() {
 }
 
 onMounted(async () => {
-  const response = await show(post_id);
+  const response = await showPost(post_id);
   post.value = response.post;
 
   title.value = post.value.title;

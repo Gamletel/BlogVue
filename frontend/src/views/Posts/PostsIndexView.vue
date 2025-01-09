@@ -13,9 +13,13 @@ onMounted(async () => {
 </script>
 
 <template>
+  <h1 class="text-center mb-5">Посты</h1>
+
   <div v-if="posts.length > 0" class="flex flex-col gap-3 mx-auto">
     <PostCard v-for="post of posts" :post="post"/>
   </div>
+
+  <h2 v-else class="text-center">Постов нет</h2>
 </template>
 
 <style scoped>

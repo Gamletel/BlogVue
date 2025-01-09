@@ -3,6 +3,7 @@
 import {useUserStore} from "@/stores/UserStore";
 import useAuth from "@/axios/useAuth";
 import axiosInstance from "@/axios/axios";
+import userPlaceholder from '@/assets/img/user-placeholder.png';
 
 const {isAuth} = useAuth();
 const user = useUserStore();
@@ -23,8 +24,11 @@ const {logout} = useAuth();
                 id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                 data-dropdown-placement="bottom">
           <span class="sr-only">Open user menu</span>
-          <img class="w-8 h-8 rounded-full" :src="axiosInstance.defaults.baseURL+'storage/'+ user.avatar"
-               alt="user photo">
+          <img class="w-8 h-8 rounded-full" :src="user?.avatar ?
+          // axiosInstance.defaults.baseURL+'storage/'+ user?.avatar
+          user?.avatar
+          : axiosInstance.defaults.baseURL + 'storage/avatars/default.png'"
+               alt="user avatar">
         </button>
         <!-- Dropdown menu -->
         <div
@@ -86,9 +90,9 @@ const {logout} = useAuth();
         <ul
           class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
           <li>
-            <a href="#"
+            <router-link :to="{name:'home'}"
                class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500 dark:bg-blue-600 md:dark:bg-transparent"
-               aria-current="page">Главная</a>
+               aria-current="page">Главная</router-link>
           </li>
           <li>
             <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar"
@@ -167,14 +171,6 @@ const {logout} = useAuth();
                          class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
               Пользователи
             </router-link>
-          </li>
-          <li>
-            <a href="#"
-               class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Pricing</a>
-          </li>
-          <li>
-            <a href="#"
-               class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</a>
           </li>
         </ul>
       </div>

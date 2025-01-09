@@ -7,44 +7,57 @@ use App\Repositories\PostRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
-class PostService
+readonly class PostService
 {
-    public function __construct(private readonly PostRepository $postRepository, private readonly UserService $userService)
+    public function __construct(private PostRepository $postRepository, private UserService $userService)
     {
     }
 
     public function all(): Collection
     {
-        return $this->postRepository->all();
+        return cache()->remember('posts.all', 60 * 60, function () {
+            return $this->postRepository->all();
+        });
     }
 
     public function show(int $id): array
     {
-        $post = $this->postRepository->find($id);
-        $user = $this->userService->show($post->user_id);
-        return [
-            'post' => $post,
-            'user' => $user
-        ];
+        return cache()->remember("posts.{$id}", 60 * 24, function () use ($id) {
+            $post = $this->postRepository->find($id);
+            $user = $this->userService->show($post->user_id);
+
+            return [
+                'post' => $post,
+                'user' => $user
+            ];
+        });
     }
 
     public function store(array $data): Post
     {
+        cache()->forget('posts.all');
+
         return $this->postRepository->create($data);
     }
 
     public function update(array $data, int $id): Post
     {
+        cache()->forget('posts.all');
+
         return $this->postRepository->update($data, $id);
     }
 
     public function delete(int $id): int
     {
+        cache()->forget('posts.all');
+
         return $this->postRepository->delete($id);
     }
 
-    public function getCommentsByID(int $id): \Ramsey\Collection\Collection
+    public function getCommentsByID(int $id)
     {
-        return $this->postRepository->getCommentsByID($id);
+        return cache()->remember("posts.comments.{$id}", 60 * 60, function () use ($id) {
+            return $this->postRepository->getCommentsByID($id);
+        });
     }
 }

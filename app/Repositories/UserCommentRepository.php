@@ -7,14 +7,17 @@ use App\Repositories\Interfaces\UserCommentRepositoryInterface;
 
 class UserCommentRepository implements UserCommentRepositoryInterface
 {
-    public function show(int $id): UserComment
+    public function show($id): UserComment
     {
         return UserComment::findOrFail($id);
     }
 
     public function store(array $data): UserComment
     {
-        return new UserComment($data);
+        $comment = new UserComment();
+        $comment->fill($data);
+        $comment->save();
+        return $comment;
     }
 
     public function delete(int $id): int

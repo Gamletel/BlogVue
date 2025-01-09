@@ -2,32 +2,34 @@
 
 namespace App\Services;
 
-use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Notifications\UserRegistered;
+use Illuminate\Support\Facades\Hash;
 
 readonly class AuthService
 {
-    public function register(array $data): User
+    public function register(array $data): array
     {
         $user = new User();
         $user->fill($data);
         $user->save();
 
-        auth()->login($user, $data['remember'] ?? false);
-        session()->regenerate();
+        $token = $user->createToken('access_token')->plainTextToken;
 
-        return $user;
+        $user->notify(new UserRegistered($user));
+
+        return [
+            'user' => $user,
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ];
     }
 
     public function login(array $data): array|null
     {
-        if (auth()->attempt([
-            'email' => $data['email'],
-            'password' => $data['password'],
-        ], $data['remember'] ?? false)) {
-            session()->regenerate();
+        $user = User::where('email', $data['email'])->first();
 
-            $user = auth()->user();
+        if ($user && Hash::check($data['password'], $user->password)) {
             $token = $user->createToken('access_token')->plainTextToken;
 
             return [
@@ -35,14 +37,15 @@ readonly class AuthService
                 'access_token' => $token,
                 'token_type' => 'Bearer',
             ];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
-    public function logout(array $data)
+    public function logout(): void
     {
-        auth()->logout();
-        auth()->user()->tokens()->delete();
+        auth()->user()->tokens->each(function ($token) {
+            $token->delete();
+        });
     }
 }

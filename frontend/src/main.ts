@@ -10,11 +10,6 @@ import {QuillEditor} from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 import 'flowbite';
-import {initFlowbite} from 'flowbite'
-
-// onMounted(() => {
-//   initFlowbite();
-// })
 const app = createApp(App)
 
 app.component('QuillEditor', QuillEditor)

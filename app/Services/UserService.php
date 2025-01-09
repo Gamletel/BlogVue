@@ -2,12 +2,10 @@
 
 namespace App\Services;
 
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Client\Request;
 
 readonly class UserService
 {
@@ -15,19 +13,28 @@ readonly class UserService
     {
     }
 
+    /**
+     * @return Collection
+     */
     public function all(): Collection
     {
-        return $this->userRepository->all();
+        return cache()->remember('users.all', 3600, function () {
+            return $this->userRepository->all();
+        });
     }
 
     public function show(int $id): User
     {
-        return $this->userRepository->show($id);
+        return cache()->remember("users.{$id}", 3600, function () use ($id) {
+            return $this->userRepository->show($id);
+        });
     }
 
-    public function store(UserStoreRequest $request): User
+    public function store(array $data): User
     {
-        return $this->userRepository->store((array)$request);
+        cache()->forget('users.all');
+
+        return $this->userRepository->store($data);
     }
 
     public function update(UserUpdateRequest $request, int $id): User
@@ -36,24 +43,27 @@ readonly class UserService
 
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('avatars');
-
             $request['avatar'] = $path;
         }
 
-        $user->update($request);
+        $user->update($request->except('password', 'old_password'));
 
-        if($request->input('password')){
-            $password = $request->validate(['password'=>'required|min:5']);
-            $password_old = $request->validate(['old_password'=>'required|current_password:sanctum']);
-
+        if ($request->filled('password')) {
+            $password = $request->validate(['password' => 'required|min:5']);
+            $password_old = $request->validate(['old_password' => 'required|current_password:sanctum']);
             $user->update($password);
         }
 
-        return $this->userRepository->update((array)$request, $id);
+        cache()->forget("users.{$id}");
+
+        return $this->userRepository->update($request->validated(), $id);
     }
 
     public function destroy(int $id): int
     {
+        cache()->forget("users.{$id}");
+        cache()->forget('users.all');
+
         return $this->userRepository->destroy($id);
     }
 

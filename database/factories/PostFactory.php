@@ -17,7 +17,8 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'=>fake()->numberBetween(),
+            'icon'=>$this->faker->imageUrl(),
+            'user_id'=>fake()->numberBetween(0, 100),
             'title'=>fake()->title,
             'description'=>fake()->text,
             'text'=>fake()->text,

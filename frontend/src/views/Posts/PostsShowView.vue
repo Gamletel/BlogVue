@@ -32,7 +32,7 @@ const comment_rating = ref<number>(5);
 async function handleDelete() {
   await deletePost(post_id);
 
-  await router.back();
+  router.back();
 }
 
 async function handleCommentSend() {
@@ -65,6 +65,7 @@ onMounted(async () => {
   user_is_creator.value = creator?.value?.id === user.id;
 
   comments.value = await postComments(post_id);
+
 })
 </script>
 
