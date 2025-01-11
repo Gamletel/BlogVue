@@ -32,6 +32,8 @@ onMounted(async () => {
   }
 
   posts.value = await userPosts(Number(route.params.id));
+
+  console.log(posts.value);
 })
 
 async function updateUser() {

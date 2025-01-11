@@ -60,12 +60,12 @@ function removeComment(deletedId: number) {
 onMounted(async () => {
   const response = await showPost(post_id);
   post.value = response.post;
-  creator.value = response.creator;
+  creator.value = response.user;
 
   user_is_creator.value = creator?.value?.id === user.id;
 
   comments.value = await postComments(post_id);
-
+  console.log(comments.value);
 })
 </script>
 

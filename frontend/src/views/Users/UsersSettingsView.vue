@@ -15,7 +15,7 @@ const email = ref<string>(user.email);
 const old_password = ref<string>('');
 const password = ref<string>(user.password);
 const avatar = ref<File | null>(null);
-const errors = ref();
+const response = ref();
 
 async function handleSubmit() {
   const formData = new FormData();
@@ -46,8 +46,8 @@ async function handleSubmit() {
     console.log(formData.get('avatar'));
   }
 
-  errors.value = await updateUser(formData);
-  console.log(errors.value);
+  response.value = await updateUser(formData);
+  console.log(response.value);
   await attempt();
 }
 
@@ -62,13 +62,23 @@ function handleFileChange(event: Event) {
 <template>
   <h1 class="mb-5">Настройки</h1>
 
-  <div v-if="errors">
-    <p v-for="error in errors">{{error}}</p>
+  <div v-if="response && response.errors">
+    <ul class="mb-5">
+      <li v-for="(error, index) in response.errors" :key="index">
+        <p class="text-red-500 mb-2">
+          {{ error[0] }}
+        </p>
+      </li>
+    </ul>
   </div>
+
   <form @submit.prevent="handleSubmit">
     <label for="avatar" class="cursor-pointer">
       <img
-        :src="axiosInstance.defaults.baseURL+'storage/'+user?.avatar ?? axiosInstance.defaults.baseURL+'storage/avatars/default.jpg'"
+        :src="
+        // axiosInstance.defaults.baseURL+'storage/'+user?.avatar
+         user?.avatar
+         ?? axiosInstance.defaults.baseURL + 'storage/avatars/default.png'"
         alt=""
         class="w-[100px] h-[100px] rounded-full mb-5">
     </label>

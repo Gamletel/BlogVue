@@ -27,22 +27,25 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param array $request
+     * @param array $data
      * @return User
      */
-    public function store(Array $request): User
+    public function store(array $data): User
     {
-        return User::create($request);
+        return User::create($data);
     }
 
     /**
-     * @param array $request
+     * @param array $data
      * @param int $id
      * @return User
      */
-    public function update(Array $request, int $id): User
+    public function update(array $data, int $id): User
     {
-        return User::fill((array)$request);
+        $user = User::findOrFail($id);
+        $user->fill($data);
+        $user->save();
+        return $user;
     }
 
     /**

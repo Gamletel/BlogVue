@@ -1,5 +1,4 @@
 import axiosInstance from "@/axios/axios";
-import type {User} from "@/types/User";
 
 export default function useUsers() {
   const indexUsers = async () => {
@@ -28,11 +27,15 @@ export default function useUsers() {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      });      console.log(response.data);
+      });
+
+      console.log(response);
+
       return response.data;
     } catch (e) {
-      console.error(e);
-      return e.response.data.errors;
+      console.log("Ошибки", e.response.data);
+
+      return e.response.data;
     }
   }
 

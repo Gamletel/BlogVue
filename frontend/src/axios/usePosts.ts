@@ -65,7 +65,7 @@ export default function usePosts() {
       const response = await axiosInstance.get(`/api/posts/${id}/get-comments`);
       return response.data;
     } catch (e) {
-      console.error('Ошибка при получении постов', e);
+      console.error('Ошибка при получении комментариев', e);
     }
   }
 

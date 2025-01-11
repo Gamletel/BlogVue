@@ -11,7 +11,7 @@ class UserUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->check();
     }
 
     /**
@@ -24,7 +24,7 @@ class UserUpdateRequest extends FormRequest
         return [
             'avatar' => 'sometimes|nullable|file|mimes:jpg,jpeg,png|max:2048',
             'name' => 'sometimes|nullable|string|min:5',
-            'email' => 'sometimes|nullable|email',
+            'email' => 'sometimes|nullable|email|unique:users,email,' . $this->user()->id,
         ];
     }
 }
