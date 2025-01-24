@@ -11,6 +11,7 @@ services:
         depends_on:
             - redis
             - db
+            - db_testing
         expose:
             -   "9000"
 
@@ -27,6 +28,15 @@ services:
             POSTGRES_DB: blog_vue
         ports:
             - "5432:5432"
+
+    db_testing:
+        image: postgres:15
+        environment:
+            POSTGRES_USER: blog_vue_testing
+            POSTGRES_PASSWORD: blog_vue_testing
+            POSTGRES_DB: blog_vue_testing
+        ports:
+            - "5433:5432"
 
     nginx:
         build:

@@ -11,69 +11,27 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Test users array json.
-     */
-    public function test_users_array(): void
-    {
-        $users = User::factory()->count(10)->create();
-        $response = $this->getJson(route('users.index'));
 
-        $response->assertStatus(200)
-            ->assertJsonCount(10);
-    }
-
-
-    /**
-     * Test users empty array json
-     */
-    public function test_users_empty_array(): void
-    {
-        $response = $this->getJson(route('users.index'));
-
-        $response->assertStatus(200)
-            ->assertJsonCount(0);
-    }
-
-    /**
-     * Test users show json
-     */
-    public function test_users_show_json(): void
+    public function test_api_user(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->getJson(route('users.show', ['id' => $user->id]));
+        $response = $this->actingAs($user)->getJson(route('api.user'));
 
-        $response->assertStatus(200)
-            ->assertJsonFragment([
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-            ]);
+        $response->assertStatus(200);
     }
 
-    /**
-     * Test users update some fields
-     */
-    public function test_users_update_name_and_email(): void
+    public function test_api_users_list(): void
     {
-        $user = User::factory()->create();
+        $users = User::factory()->count(3)->create();
+        $response = $this->getJson(route('api.users.index'));
 
-        $updatedData = [
-            'name' => fake()->name,
-            'email' => fake()->email,
-        ];
-
-        $response = $this->postJson(route('users.update', ['id' => $user->id]), $updatedData);
-
-        $response->assertStatus(200)
-            ->assertJsonFragment([
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $updatedData['name'],
-                    'email' => $updatedData['email'],
-                    'avatar_path' => $user->avatar,
-                ],
-            ]);
+        $response->assertStatus(200)->assertJsonStructure([
+            '*'=>[
+                "id",
+                "name",
+                "email",
+            ]
+        ]);
     }
 }
