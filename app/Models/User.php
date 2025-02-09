@@ -3,8 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -20,7 +23,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
     /**
@@ -61,8 +64,31 @@ class User extends Authenticatable
     /**
      * @return HasMany
      */
-    public function post(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function post(): HasMany
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+    }
+
+    public function hasRole(string|array $names): bool
+    {
+        if (is_array($names)) {
+            return $this->roles()->whereIn('name', $names)->exists();
+        }
+        return $this->roles()->where('name', $names)->exists();
+    }
+
+    public function hasPermission(string $name): bool
+    {
+        foreach ($this->roles as $role) {
+            if ($role->hasPermission($name)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

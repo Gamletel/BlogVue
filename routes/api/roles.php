@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => 'roles',
     'as' => 'roles.',
+    'middleware'=>'is.admin',
 ], function () {
     Route::get('/', [RoleController::class, 'index'])->name('index');
     Route::get('/full', [RoleController::class, 'full'])->name('full');
