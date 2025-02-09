@@ -4,7 +4,7 @@ use App\Http\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'prefix' => 'usersRoles',
+    'prefix' => 'user-roles',
     'as' => 'usersRoles.',
 ], function () {
     Route::get('/', [UserRoleController::class, 'index'])->name('index');

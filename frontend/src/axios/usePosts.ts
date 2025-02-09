@@ -9,7 +9,7 @@ export default function usePosts() {
       return response.data;
     } catch (e) {
       console.error('Ошибка при получении постов', e);
-      return {};
+      return [];
     }
   }
 
@@ -33,7 +33,7 @@ export default function usePosts() {
     }
   }
 
-  const updatePost= async (id: number, data: Post) => {
+  const updatePost = async (id: number, data: Post) => {
     try {
       const response = await axiosInstance.patch(`/api/posts/${id}`, data);
       console.log('Пост обновлен', response.data);
@@ -60,8 +60,8 @@ export default function usePosts() {
     }
   }
 
-  const postComments = async (id: number)=>{
-    try{
+  const postComments = async (id: number) => {
+    try {
       const response = await axiosInstance.get(`/api/posts/${id}/get-comments`);
       return response.data;
     } catch (e) {

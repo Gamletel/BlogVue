@@ -8,6 +8,7 @@ export default function useUsers() {
       return response.data;
     } catch (e) {
       console.error(e);
+      return [];
     }
   }
 

@@ -12,6 +12,8 @@ import UsersSettingsView from "@/views/Users/UsersSettingsView.vue";
 import useAuth from "@/axios/useAuth";
 import {useUserStore} from "@/stores/UserStore";
 import {echo} from "@/echo";
+import AdminDashboardView from "@/views/Admin/AdminDashboardView.vue";
+import RolesView from "@/views/Admin/RolesView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +67,16 @@ const router = createRouter({
       path: '/users/:id/settings',
       name: 'users.settings',
       component: UsersSettingsView,
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'admin.dashboard',
+      component: AdminDashboardView,
+    },
+    {
+      path: '/admin/roles',
+      name: 'admin.roles',
+      component: RolesView,
     },
   ],
 })

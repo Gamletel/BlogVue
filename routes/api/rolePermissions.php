@@ -4,8 +4,8 @@ use App\Http\Controllers\RolePermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
-    'prefix' => 'rolesPermissions',
-    'as' => 'rolesPermissions.',
+    'prefix' => 'role-permissions',
+    'as' => 'rolePermissions.',
 ], function () {
     Route::get('/', [RolePermissionController::class, 'index'])->name('index');
     Route::get('/{id}', [RolePermissionController::class, 'show'])->name('show');

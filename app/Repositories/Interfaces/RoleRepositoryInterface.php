@@ -13,6 +13,11 @@ interface RoleRepositoryInterface
     public function all():Collection;
 
     /**
+     * @return Collection
+     */
+    public function withPermissions():Collection;
+
+    /**
      * @param $id
      * @return Role
      */

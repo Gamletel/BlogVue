@@ -20,6 +20,15 @@ class RoleRepository implements Interfaces\RoleRepositoryInterface
     /**
      * @inheritDoc
      */
+    public function withPermissions(): Collection
+    {
+        return Role::rightJoin('role_permissions', 'roles.id', '=', 'permissions.role_id')
+            ->rightJoib('');
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function show($id): Role
     {
         return Role::find($id);

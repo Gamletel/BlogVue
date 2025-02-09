@@ -14,7 +14,7 @@ class RolePermissionRepository implements RolePermissionRepositoryInterface
      */
     public function all(): Collection
     {
-        return RolePermission::all();
+        return RolePermission::with(['role', 'permission'])->get()->groupBy('role_id');
     }
 
     /**

@@ -17,6 +17,11 @@ class RoleService
         return $this->roleRepository->all();
     }
 
+    public function withPermissions()
+    {
+        return $this->roleRepository->withPermissions();
+    }
+
     /**
      * @param int $id
      * @return Role
