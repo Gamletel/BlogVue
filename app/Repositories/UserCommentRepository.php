@@ -3,9 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\UserComment;
-use App\Repositories\Interfaces\UserCommentRepositoryInterface;
 
-class UserCommentRepository implements UserCommentRepositoryInterface
+class UserCommentRepository
 {
     public function show($id): UserComment
     {

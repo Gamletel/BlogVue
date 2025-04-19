@@ -2,22 +2,26 @@
 import {ref} from "vue";
 import usePosts from "@/axios/usePosts";
 import {useUserStore} from "@/stores/UserStore";
+import router from "@/router";
 
 const user_id = useUserStore().id;
 const title = ref('');
 const description = ref('');
 const text = ref('');
-const icon = ref('');
 
 async function handleSubmit() {
   const {createPost} = usePosts();
 
-  await createPost({
+  const response = await createPost({
     user_id: user_id,
     title: title.value,
     description: description.value,
     text: text.value
   });
+
+  if(response.status === 200) {
+    await router.push('posts.show', response.data.id);
+  }
 }
 </script>
 

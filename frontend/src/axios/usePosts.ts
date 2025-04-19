@@ -27,9 +27,11 @@ export default function usePosts() {
   const createPost = async (data: Post) => {
     try {
       const response = await axiosInstance.post('/api/posts/create', data);
-      console.log('Пост успешно создан!', response.data);
+      console.log('Пост успешно создан!', response);
+      return response;
     } catch (e) {
       console.error('Ошибка при создании поста', e);
+      return e;
     }
   }
 

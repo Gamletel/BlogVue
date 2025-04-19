@@ -4,10 +4,9 @@ namespace App\Repositories;
 
 use App\Models\Post;
 use App\Models\UserComment;
-use App\Repositories\Interfaces\PostRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
-readonly class PostRepository implements PostRepositoryInterface
+readonly class PostRepository
 {
     public function all(): Collection
     {
