@@ -5,8 +5,12 @@ namespace App\Repositories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
-class UserRepository
+class UserRepository extends BaseRepository
 {
+    public function __construct(User $model)
+    {
+        parent::__construct($model);
+    }
 
     /**
      * @return Collection
@@ -16,22 +20,14 @@ class UserRepository
         return User::all();
     }
 
-    /**
-     * @param int $id
-     * @return User
-     */
-    public function show(int $id): User
+    public function show(int $id)   
     {
-        return User::findOrFail($id);
+        return $this->find($id);
     }
 
-    /**
-     * @param array $data
-     * @return User
-     */
-    public function store(array $data): User
+    public function store(array $data)
     {
-        return User::create($data);
+        return $this->create($data);
     }
 
     /**
@@ -53,6 +49,6 @@ class UserRepository
      */
     public function destroy(int $id): int
     {
-        return User::destroy($id);
+        return $this->delete($id);
     }
 }

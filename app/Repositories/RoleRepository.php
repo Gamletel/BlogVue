@@ -19,7 +19,7 @@ class RoleRepository
             ->rightJoib('');
     }
 
-    public function show($id): Role
+    public function show($id): Collection
     {
         return Role::find($id);
     }

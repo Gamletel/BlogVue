@@ -6,45 +6,18 @@ use App\Models\Post;
 use App\Models\UserComment;
 use Illuminate\Database\Eloquent\Collection;
 
-readonly class PostRepository
+class PostRepository extends BaseRepository
 {
-    public function all(): Collection
+    public function __construct(Post $model)
     {
-        return Post::all();
+        parent::__construct($model);
     }
 
-    public function find(int $id): ?Post
+    public function getCommentsByID(int $id): Collection
     {
-        return Post::findorFail($id);
-    }
-
-    public function create(array $data): Post
-    {
-        $post = new Post();
-        $post->fill($data);
-        $post->save();
-        return $post;
-    }
-
-    public function update(array $data, int $id): Post
-    {
-        $post = Post::findOrFail($id);
-
-        $post->fill($data);
-        $post->save();
-
-        return $post;
-    }
-
-    public function delete(int $id): int
-    {
-        return Post::destroy($id);
-    }
-
-    public function getCommentsByID(int $id)
-    {
-        return UserComment::where('post_id', $id)
+        return $this->model->findOrFail($id)
+            ->comments()
             ->orderBy('id', 'DESC')
-            ->pluck('id');
+            ->get();
     }
 }
