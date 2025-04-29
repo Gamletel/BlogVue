@@ -11,7 +11,6 @@ import UsersIndexView from "@/views/Users/UsersIndexView.vue";
 import UsersSettingsView from "@/views/Users/UsersSettingsView.vue";
 import useAuth from "@/axios/useAuth";
 import {useUserStore} from "@/stores/UserStore";
-import {echo} from "@/echo";
 import AdminDashboardView from "@/views/Admin/AdminDashboardView.vue";
 import RolesView from "@/views/Admin/RolesView.vue";
 

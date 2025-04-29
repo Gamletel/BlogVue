@@ -8,6 +8,7 @@ import MainLayout from "@/layouts/MainLayout.vue";
   <Header/>
   <MainLayout>
     <RouterView/>
+    <NotificationToast />
   </MainLayout>
 </template>
 

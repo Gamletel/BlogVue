@@ -47,11 +47,11 @@ class Post extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-//    /**
-//     * @return HasMany
-//     */
-//    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
-//    {
-//        return $this->hasMany(UserComment::class, 'post_id');
-//    }
+    /**
+     * @return HasMany
+     */
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserComment::class, 'post_id');
+    }
 }

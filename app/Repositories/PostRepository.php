@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Post;
-use App\Models\UserComment;
 use Illuminate\Database\Eloquent\Collection;
 
 class PostRepository extends BaseRepository

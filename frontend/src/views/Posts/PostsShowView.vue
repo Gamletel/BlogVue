@@ -36,7 +36,7 @@ async function handleDelete() {
 }
 
 async function handleCommentSend() {
-  if (isAuth.value) {
+  if (isAuth.value && user.id !== -1) {
     const data = await storeComment({
       post_id: post_id,
       user_id: user.id,
@@ -171,11 +171,12 @@ onMounted(async () => {
   <div v-if="comments"
        id="comments"
        class="border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col gap-5 p-5 mt-5">
-    <CommentCard v-for="comment in comments"
-                 :key="comment"
-                 :id="comment"
-                 @commentDeleted="removeComment"
-    />
+       <CommentCard 
+          v-for="commentId in comments"
+          :key="commentId"
+          :id="commentId"
+          @commentDeleted="removeComment"
+        />
   </div>
 </template>
 

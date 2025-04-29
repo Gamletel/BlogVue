@@ -8,20 +8,22 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
-class CommentSend implements ShouldBroadcast
+class CommentCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $comment;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public UserComment $comment)
+    public function __construct(UserComment $comment)
     {
-        //
+        $this->comment = $comment;
     }
 
     /**
@@ -31,10 +33,21 @@ class CommentSend implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        $userID = $this->comment->post->user;
-
         return [
-            new PrivateChannel("user.notification.{$userID}"),
+            new PrivateChannel('user.'.$this->comment->post->user_id),
+        ];
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'message'=>$this->comment->user->name . ' оставил комментарий на вашем посте',
+            'data'=>[
+                'post_id'=>$this->comment->post_id,
+                'post_title'=>$this->comment->post->title,
+                'comment_id'=>$this->comment->id,
+                'comment_preview'=>Str::limit($this->comment->text, 50),
+            ]
         ];
     }
 }

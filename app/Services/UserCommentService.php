@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\UserComment;
 use App\Repositories\UserCommentRepository;
+use App\Events\CommentCreated;
 
 readonly class UserCommentService
 {
@@ -22,7 +23,10 @@ readonly class UserCommentService
     {
         cache()->forget("posts.comments.{$data['post_id']}");
 
-        return $this->userCommentRepository->store($data);
+        $comment = $this->userCommentRepository->store($data);
+        event(new CommentCreated($comment));
+
+        return $comment;
     }
 
     public function delete(int $id): int
