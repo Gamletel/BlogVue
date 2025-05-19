@@ -38,7 +38,12 @@ class UserController extends Controller
     public function profile(Request $request): JsonResponse
     {
         $user = $request->user();
-        return response()->json($user);
+
+        if ($user) {
+            return response()->json($user);
+        }else{
+            return response()->json(["message" => "Unauthenticated"], 401);
+        }
     }
 
     /**
@@ -67,7 +72,11 @@ class UserController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        return response()->json($this->userService->show($id));
+        $model = $this->userService->show($id);
+        if (!$model) {
+            return response()->json(["message" => "User not found"], 404);
+        }
+        return response()->json($model);
     }
 
     /**

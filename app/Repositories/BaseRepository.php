@@ -31,15 +31,8 @@ abstract class BaseRepository
 
     public function find(int $id): ?Model
     {
-        try {
-            return Cache::remember(
-                get_class($this->model) . ".{$id}",
-                3600,
-                fn() => $this->model->findOrFail($id)
-            );
-        } catch (ModelNotFoundException $e) {
-            return null;
-        }
+        $model = $this->model->find($id);
+        return $model;
     }
 
     public function create(array $data): Model
