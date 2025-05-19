@@ -8,6 +8,7 @@ Route::group([
     'as' => 'users.'
 ], function () {
     Route::get('/', [UserController::class, 'index'])->name('index');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::get('/{id}/posts', [UserController::class, 'postsByUser'])->name('posts');
     Route::get('/{id}', [UserController::class, 'show'])->name('show');
     Route::post('/{id}', [UserController::class, 'update'])->name('update')->middleware("auth:sanctum");

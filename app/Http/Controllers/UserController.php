@@ -6,6 +6,7 @@ use App\Http\Requests\User\UserUpdateRequest;
 use App\Models\Post;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -32,6 +33,12 @@ class UserController extends Controller
     public function index(): JsonResponse
     {
         return response()->json($this->userService->all());
+    }
+
+    public function profile(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        return response()->json($user);
     }
 
     /**

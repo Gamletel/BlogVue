@@ -20,7 +20,7 @@ class UserRepository extends BaseRepository
         return User::all();
     }
 
-    public function show(int $id)   
+    public function show(int $id)
     {
         return $this->find($id);
     }

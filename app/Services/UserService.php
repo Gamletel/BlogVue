@@ -23,7 +23,7 @@ readonly class UserService
         });
     }
 
-    public function show(int $id): User
+    public function show(int $id)
     {
         return cache()->remember("users.{$id}", 3600, function () use ($id) {
             return $this->userRepository->show($id);

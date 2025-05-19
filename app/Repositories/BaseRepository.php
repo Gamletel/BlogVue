@@ -55,7 +55,7 @@ abstract class BaseRepository
         if (!$model) {
             throw new ModelNotFoundException("Model not found with ID: {$id}");
         }
-        
+
         $model->update($data);
         $this->clearCache();
         return $model;
